@@ -2414,7 +2414,9 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
                 }
 
                 JEditorPane pane = new JEditorPane("text/q", lm.toString());
-                System.out.printf(" %s%n",lm.toString());
+                String[] splitResult = lm.toString().split("(?<=\\G.{500})");
+                for (String s: splitResult) {System.out.printf(" %s%n",s);}
+                
                 pane.setEditable(false);
                 //not setting a font results in exception e.g. on a string like "\331\203"
                 pane.setFont(Config.getInstance().getFont());
