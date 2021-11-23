@@ -452,7 +452,7 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
         return null;
     }
 
-    private void exportAsExcel(final String filename) {
+    public void exportAsExcel(final String filename) {
         new ExcelExporter().exportTableX(frame, table, new File(filename), false);
     }
 
@@ -629,12 +629,17 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
         t.start();
     }
 
-    private void exportAsTxt(String filename) {
+    public void exportAsTxt(String filename) {
         exportAsDelimited(table.getModel(), filename, '\t');
     }
 
-    private void exportAsCSV(String filename) {
+    public void exportAsCSV(String filename) {
         exportAsDelimited(table.getModel(), filename, ',');
+    }
+
+    public void chart() {
+        // exportAsDelimited(table.getModel(), filename, ',');
+        new LineChart((KTableModel) table.getModel());
     }
 
     private void export() {
@@ -1098,7 +1103,7 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
         return true;
     }
 
-    private void setServer(Server server) {
+    public void setServer(Server server) {
         if (server == null) {
             return;
         }
@@ -2409,6 +2414,7 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
                 }
 
                 JEditorPane pane = new JEditorPane("text/q", lm.toString());
+                System.out.printf(" %s%n",lm.toString());
                 pane.setEditable(false);
                 //not setting a font results in exception e.g. on a string like "\331\203"
                 pane.setFont(Config.getInstance().getFont());
