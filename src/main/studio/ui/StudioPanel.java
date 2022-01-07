@@ -2414,8 +2414,8 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
                 }
 
                 JEditorPane pane = new JEditorPane("text/q", lm.toString());
-                String[] splitResult = lm.toString().split("(?<=\\G.{500})");
-                for (String s: splitResult) {System.out.printf(" %s%n",s);}
+
+                // System.out.printf(" %s%n","");
                 
                 pane.setEditable(false);
                 //not setting a font results in exception e.g. on a string like "\331\203"
@@ -2500,13 +2500,15 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
                         try {
                             throw exception;
                         } catch (IOException ex) {
-                            StudioOptionPane.showMessageDialog(frame,
-                                "\nA communications error occurred whilst sending the query.\n\nPlease check that the server is running on " +
+                            String msg = "\nA communications error occurred whilst sending the query.\n\nPlease check that the server is running on " +
                                     server.getHost() + ":" + server.getPort() +
-                                    "\n\nError detail is\n\n" + ex.getMessage() + "\n\n",
+                                    "\n\nError detail is\n\n" + ex.getMessage() + "\n\n";
+                            StudioOptionPane.showMessageDialog(frame,
+                                msg,
                                 "Studio for kdb+",
                                 JOptionPane.ERROR_MESSAGE,
                                 Util.ERROR_ICON);
+                                System.out.printf(" %s%n",msg);
                         } catch (c.K4Exception ex) {
                             JTextPane pane = new JTextPane();
                             String hint = QErrors.lookup(ex.getMessage());
@@ -2515,9 +2517,10 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
                             } else {
                                 hint = "";
                             }
-                            pane.setText(
-                                "An error occurred during execution of the query.\nThe server sent the response:\n" +
-                                    ex.getMessage() + hint);
+                            String msg ="An error occurred during execution of the query.\nThe server sent the response:\n" +
+                                    ex.getMessage() + hint;
+                            System.out.printf(" %s%n",msg);        
+                            pane.setText(msg);
                             pane.setForeground(Color.RED);
 
                             JScrollPane scrollpane = new JScrollPane(pane);
@@ -2531,10 +2534,12 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
                                 .addTab(frame.getTitle(), frame.getIcon(), frame.getComponent());
                             tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
                         } catch (java.lang.OutOfMemoryError ex) {
-                            StudioOptionPane.showMessageDialog(frame,
-                                "\nOut of memory whilst communicating with " + server.getHost() +
+                            String msg ="\nOut of memory whilst communicating with " + server.getHost() +
                                     ":" + server.getPort() +
-                                    "\n\nThe result set is probably too large.\n\nTry increasing the memory available to studio through the command line option -J -Xmx512m\n\n",
+                                    "\n\nThe result set is probably too large.\n\nTry increasing the memory available to studio through the command line option -J -Xmx512m\n\n";
+                            System.out.printf(" %s%n",msg);
+                            StudioOptionPane.showMessageDialog(frame,
+                                msg,
                                 "Studio for kdb+",
                                 JOptionPane.ERROR_MESSAGE,
                                 Util.ERROR_ICON);
@@ -2546,26 +2551,33 @@ public class StudioPanel extends JPanel implements Observer, WindowListener {
                                     "No message with exception. Exception is " + ex;
                             }
 
-                            StudioOptionPane.showMessageDialog(frame,
-                                "\nAn unexpected error occurred whilst communicating with " +
+                            String msg ="\nAn unexpected error occurred whilst communicating with " +
                                     server.getHost() + ":" + server.getPort() +
-                                    "\n\nError detail is\n\n" + message + "\n\n",
+                                    "\n\nError detail is\n\n" + message + "\n\n";
+                            System.out.printf(" %s%n",msg);
+
+                            StudioOptionPane.showMessageDialog(frame,
+                                msg,
                                 "Studio for kdb+",
                                 JOptionPane.ERROR_MESSAGE,
                                 Util.ERROR_ICON);
                         }
                     } else {
                         try {
+                            String msg ="Last execution time:" + (execTime > 0 ? "" + execTime : "<1") +" mS";
+                            System.out.printf(" %s%n",msg);                            
                             Utilities.setStatusText(textArea,
                                 "Last execution time:" + (execTime > 0 ? "" + execTime : "<1") +
                                     " mS");
                             processK4Results(r);
                         } catch (Exception e) {
-                            StudioOptionPane.showMessageDialog(frame,
-                                "\nAn unexpected error occurred while processing results from " +
+                            String msg ="\nAn unexpected error occurred while processing results from " +
                                     server.getHost() + ":" + server.getPort() +
                                     "\n\nError detail is\n\n" + e.getMessage() + "\n\n"
-                                    + Util.extractStackTrace(e),
+                                    + Util.extractStackTrace(e);
+                            System.out.printf(" %s%n",msg);                            
+                            StudioOptionPane.showMessageDialog(frame,
+                                msg,
                                 "Studio for kdb+",
                                 JOptionPane.ERROR_MESSAGE,
                                 Util.ERROR_ICON);
